@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import OptionComponent from '@/components/OptionComponent.vue'
 import { SettingOutlined } from '@ant-design/icons-vue'
 import fetchProxy from '@/utils/fetchProxy'
 import type { Question } from '@/index'
 import { message } from 'ant-design-vue'
+import setting from '@/store/setting'
+import sliceChineseStr from '@/utils/sliceChineseStr'
 
 const optionSigns = (index: number) => {
   return String.fromCharCode(('A'.codePointAt(0) as number) + index)
 }
-
-const autoCollect = ref(true)
 
 const id = ref<number>()
 const question = ref<string>()
@@ -80,7 +80,7 @@ const onSelect = async (index: number) => {
       }),
     })
 
-    if (autoCollect.value && wrongAnswers.value.length > 0) {
+    if (setting.data.autoCollect && wrongAnswers.value.length > 0) {
       collectQuestion()
       collected.value = !collected.value
     }
@@ -122,20 +122,19 @@ const nextQuestion = async () => {
   }
 }
 
-watch(autoCollect, () => {
-  localStorage.setItem('autoCollect', autoCollect.value ? 'Y' : 'N')
-})
-
 onMounted(() => {
-  if (localStorage.getItem('autoCollect') === 'N') {
-    autoCollect.value = false
-  }
-  // correctAnswer.value = 2
   nextQuestion()
 })
 
 const todoInfo = () => {
   message.info('敬请期待')
+}
+
+const textI18nFilter = (text: string | undefined) => {
+  if (setting.data.twoToneLanguage || text === undefined) {
+    return text || ''
+  }
+  return sliceChineseStr(text)
 }
 </script>
 
@@ -143,12 +142,12 @@ const todoInfo = () => {
   <div class="question" :spinning="true">
     <p>
       <span style="color: #1890ff">[{{ id }}]</span>
-      {{ question }}
+      {{ textI18nFilter(question) }}
     </p>
     <template v-for="(option, index) in options" :key="index">
       <option-component
         :index="index"
-        :text="option"
+        :text="textI18nFilter(option)"
         :type="getOptionType(index)"
         @click="onSelect"
       ></option-component>
@@ -179,11 +178,12 @@ const todoInfo = () => {
     </div>
   </transition>
   <div class="footer">
+    <!--设置按钮-->
     <a-button
       type="normal"
       shape="circle"
       size="32"
-      class="setting"
+      class="float-left"
       @click="settingBlankShow = !settingBlankShow"
     >
       <setting-outlined />
@@ -199,9 +199,13 @@ const todoInfo = () => {
   </div>
 
   <a-drawer title="设置" v-model:visible="settingBlankShow" placement="bottom">
-    <div class="setting-item" @click="autoCollect = !autoCollect">
+    <div class="setting-item" @click="setting.setAutoCollect()">
       <label>自动收藏错题</label>
-      <a-switch :checked="autoCollect"></a-switch>
+      <a-switch :checked="setting.data.autoCollect"></a-switch>
+    </div>
+    <div class="setting-item" @click="setting.setTwoToneLanguage()">
+      <label>中英对照</label>
+      <a-switch :checked="setting.data.twoToneLanguage"></a-switch>
     </div>
     <div class="setting-item" @click="todoInfo">
       <label style="opacity: 0.5">只做已收藏题目</label>
@@ -253,7 +257,7 @@ const todoInfo = () => {
   text-align: right;
 }
 
-.setting {
+.float-left {
   float: left;
 }
 

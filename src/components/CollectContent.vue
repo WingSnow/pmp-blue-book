@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue'
 import OptionComponent from '@/components/OptionComponent.vue'
-import { UnorderedListOutlined, ReloadOutlined } from '@ant-design/icons-vue'
+import {
+  UnorderedListOutlined,
+  ReloadOutlined,
+  SettingOutlined,
+} from '@ant-design/icons-vue'
 import fetchProxy from '@/utils/fetchProxy'
 import type { Question } from '@/index'
 import { message } from 'ant-design-vue'
+import setting from '@/store/setting'
+import sliceChineseStr from '@/utils/sliceChineseStr'
 
 const optionSigns = ['A', 'B', 'C', 'D']
 
@@ -18,6 +24,7 @@ const collected = ref<boolean>(false)
 const questionLocalStorage: Map<number, Question> = new Map()
 
 const listBlankShow = ref(false)
+const settingBlankShow = ref(false)
 
 const collectQuestion = async () => {
   await fetchProxy(`/api/questions/${id.value}/collect`, {
@@ -117,6 +124,13 @@ const refreshList = async () => {
   await getQuestion(0)
 }
 
+const textI18nFilter = (text: string | undefined) => {
+  if (setting.data.twoToneLanguage || text === undefined) {
+    return text || ''
+  }
+  return sliceChineseStr(text)
+}
+
 onMounted(async () => {
   await getQuestion(0)
   nextQuestion(1)
@@ -140,12 +154,12 @@ const downEnable = computed(() => {
       <div class="question">
         <p>
           <span style="color: #1890ff">[{{ id }}]</span>
-          {{ question }}
+          {{ textI18nFilter(question) }}
         </p>
         <template v-for="(option, index) in options" :key="index">
           <option-component
             :index="index"
-            :text="option"
+            :text="textI18nFilter(option)"
             :type="getOptionType(index)"
           ></option-component>
         </template>
@@ -166,15 +180,26 @@ const downEnable = computed(() => {
     </div>
   </a-spin>
   <div class="footer">
-    <a-button
-      type="normal"
-      shape="circle"
-      size="32"
-      class="setting"
-      @click="listBlankShow = !listBlankShow"
-    >
-      <unordered-list-outlined />
-    </a-button>
+    <a-space class="float-left">
+      <!--选题按钮-->
+      <a-button
+        type="normal"
+        shape="circle"
+        size="32"
+        @click="listBlankShow = !listBlankShow"
+      >
+        <unordered-list-outlined />
+      </a-button>
+      <!--设置按钮-->
+      <a-button
+        type="normal"
+        shape="circle"
+        size="32"
+        @click="settingBlankShow = !settingBlankShow"
+      >
+        <setting-outlined />
+      </a-button>
+    </a-space>
     <a-space>
       <a-button
         type="normal"
@@ -226,6 +251,17 @@ const downEnable = computed(() => {
         </template>
       </a-spin>
     </a-drawer>
+
+    <a-drawer
+      title="设置"
+      v-model:visible="settingBlankShow"
+      placement="bottom"
+    >
+      <div class="setting-item" @click="setting.setTwoToneLanguage()">
+        <label>中英对照</label>
+        <a-switch :checked="setting.data.twoToneLanguage"></a-switch>
+      </div>
+    </a-drawer>
   </div>
 </template>
 
@@ -268,8 +304,21 @@ const downEnable = computed(() => {
   text-align: right;
 }
 
-.setting {
+.float-left {
   float: left;
+}
+
+.setting-item {
+  font-size: 16px;
+  width: 100%;
+  padding: 8px 8px;
+  background-color: #fff;
+  border-bottom: solid 1px #bfbfbf;
+  text-align: right;
+
+  label {
+    float: left;
+  }
 }
 
 .list-drawer {

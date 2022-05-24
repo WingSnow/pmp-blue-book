@@ -2,7 +2,6 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 import externalGlobals from 'rollup-plugin-external-globals'
-import commonjs from "rollup-plugin-commonjs"
 import { visualizer } from 'rollup-plugin-visualizer'
 
 const globals = externalGlobals({
@@ -29,7 +28,6 @@ export default defineConfig({
     rollupOptions: {
       external: ['vue', "vue-router", "ant-design-vue", "dayjs"],
       plugins: [
-        commonjs(),
         globals,
       ]
     }
