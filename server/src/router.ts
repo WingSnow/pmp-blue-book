@@ -10,11 +10,14 @@ import {
 
 const router: Router = new Router()
 
+router.prefix('/api')
+
+router.get('/', async (ctx, next) => {
+  ctx.body = "Hello Koa and TS."
+})
+
 router.post('/token', auth)
 
-router.get('/', async (ctx) => {
-  ctx.body = 'Hello Koa and TS.'
-})
 router.get('/exam', getExam)
 router.get('/collections', getCollections)
 router.get('/collections/:id', getCollections)
@@ -25,4 +28,4 @@ router.delete('/questions/:id/collect', cancelCollect)
 
 export default router
 
-export const defaultPath = ['/token']
+export const defaultPath = ['/api/token']

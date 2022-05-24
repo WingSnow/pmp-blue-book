@@ -7,15 +7,16 @@
     "strict": true,
     "jsx": "preserve",
     "sourceMap": true,
-	"outDir": "./dist",
+    "outDir": "./dist",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
     "skipLibCheck": true,
-	"baseUrl": ".",
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "*": ["./node_modules.@types","./types/*"]
     }
   },
   "include": [
