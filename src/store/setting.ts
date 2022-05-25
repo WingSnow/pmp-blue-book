@@ -10,8 +10,8 @@ class Setting {
 
   constructor() {
     this.data = reactive({
-      autoCollect: false,
-      twoToneLanguage: false,
+      autoCollect: true,
+      twoToneLanguage: true,
     })
     if (localStorage.getItem('autoCollect') === 'N') {
       this.data.autoCollect = false

@@ -7,8 +7,6 @@ import CollectContent from '../components/CollectContent.vue'
 
 const selectedKeys = ref<string[]>(['0'])
 
-const twoToneLanguage = ref(true)
-
 const router = useRouter()
 
 const logout = () => {

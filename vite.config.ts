@@ -25,7 +25,7 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: 'dist',
+    outDir: './dist/static',
     rollupOptions: {
       external: ['vue', "vue-router", "ant-design-vue", "dayjs"],
       plugins: [
@@ -34,9 +34,10 @@ export default defineConfig({
     }
   },
   server: {
+    port: 5000,
     proxy: {
       '/api': {
-        target: 'http://127.0.0.1:80',
+        target: 'http://127.0.0.1:3000',
         changeOrigin: true,
         // rewrite: (path) => path.replace(/^\/api/, '')
       }

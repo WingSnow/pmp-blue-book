@@ -18,7 +18,7 @@ module.exports = {
   },
   overrides: [
   {
-    files: ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+    files: ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "server/src/**/*.ts"],
     parserOptions: {
       project: ['./tsconfig.json'],
     },

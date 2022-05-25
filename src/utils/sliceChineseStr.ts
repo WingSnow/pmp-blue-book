@@ -10,6 +10,10 @@ const sliceChineseStr = (str: string) => {
       break
     }
   }
+  // 如果找不到中文，则原样返回，以处理全数字或英文的选项
+  if (index === 0) {
+    return str
+  }
   return str.slice(0, index + 1)
 }
 

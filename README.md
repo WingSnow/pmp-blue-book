@@ -2,7 +2,7 @@
 
 ---
 
-<img src='./src/assets/logo.png' width='50%'>
+<img src='./src/assets/logo.png' width='50%' align='center'>
 
 一个针对PMP考试的刷题小工具，理论上可以通过修改题库支持任何类型的刷题需要。
 
@@ -10,7 +10,7 @@
 
 ### 已实现功能
 
-![](./assets/pic.png)
+<img src='./assets/pic.png' align='center'>
 
 - 支持**刷题**和**背题**模式（背题可以理解成看错题本）
 - 答错的题自动收藏（可设置）
@@ -59,11 +59,7 @@ npm install
 ### 运行项目（开发模式）
 
 ```
-npm run preview # 仅前端
-```
-
-```
-npm run serve # 仅服务器
+npm run vite # 仅前端
 ```
 
 ```
@@ -74,10 +70,10 @@ npm run watch-serve # 仅服务器（热更新）
 npm run dev # 同时启动前端和服务器
 ```
 
-### 打包构建（仅前端）
+### 打包构建
 
 ```
-npm run dev
+npm run build
 ```
 
 ### 运行项目（打包后）
@@ -86,17 +82,48 @@ npm run dev
 npm run start
 ```
 
+打包后会在生成`/dist`，该目录下是编译之后的服务器端代码；打包后的前端代码在`/dist/static`目录下。
+
+如果是首次打包（或者删除`dist`目录后重新打包），还要将`/server/src`内的`secrets`目录整个复制到`/dist`目录下。
+
+```
+cp -r server/src/secrets dist
+```
+
+另外提供了一个精简版的`package.json`（`package.prod.json`），将包发布到生产环境时可以将该文件复制到`dist`目录下（并改名为`package.json`），从而减少在生产环境安装的依赖包。
+
+```
+cp package.prod.json dist/package.json
+```
+
 ### 注意事项
 
 #### 关于secrets目录
 
-在`/server/src/secrets`目录内有两个文件，
+在`/server/src/secrets`目录内有三个文件，
 
 - `db.db`：sqlite数据库文件，题库也在里面（questions表）。
 - `jwt-key`：jsonwebtoken的密钥
+- `salt`：md5加盐算法（用于加密用户密码）的盐
 
 如果要用于生产用途或不想暴露密钥，请将`secrets`目录添加到`.gitignore`。
 
 #### 用户密码
 
-用户名和密码保存在数据库文件的users表中，密码明文保存（admin/admin）。如果要加密请自行改造。
+用户名和密码保存在数据库文件的users表中，初始用户密码为admin/admin，密码已经使用MD5加盐加密。
+
+修改盐（`/server/src/secrets/salt`）后记得重新生成密码并更新数据表。
+
+可以使用`server/src/utils/md5.ts`生成加密密码。
+
+```bash
+npx ts-node server/src/utils/md5 admin admin
+# 第一个参数（admin）是用户名，第二个参数（admin)是密码
+```
+
+## 题目解析
+
+内置了一个将固定格式（光环云考试）的题目转为json格式，以便后续处理或导入数据库存储的小工具。
+
+用法见`/utils/README.md`
+
