@@ -113,9 +113,6 @@ const jumpTo = async (questionId: number) => {
 
 const nextQuestion = async (direction: number) => {
   const currentIndex = collectionsIdList.value.indexOf(current.value)
-  if (currentIndex >= collectionsIdList.value.length - 1) {
-    return
-  }
   current.value = collectionsIdList.value[currentIndex + direction]
   loadQusetion(current.value)
 }

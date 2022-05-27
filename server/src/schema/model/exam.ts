@@ -3,17 +3,18 @@ import db from '../db'
 const getExam = async (limit: number, onlyNew = 0, userId?: number) => {
   const result = await db.each(
     `select q.*,
-      case
+    case
         when c.user_id is not null then 'Y'
         else ''
         end as collected
     from questions q
-      left join collections c on q.id = c.question_id and user_id = $userId
+          left join collections c on q.id = c.question_id and user_id = $userId
     where (0 = $onlyNew or id not in (
-      select question_id
-      from answer_record
-      where user_id = $userId
+    select question_id
+    from answer_record
+    where user_id = $userId
     ))
+    and (q.id not in (select question_id from answer_record where user_id = $userId) or random() % 2 = 1)
     order by random()
     limit $limit`,
     {
