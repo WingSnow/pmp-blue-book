@@ -2,7 +2,7 @@
 
 ---
 
-<img src='./src/assets/logo.png' width='50%' align='center'>
+<p align='center'><img src='./src/assets/logo.png' width='50%'></p>
 
 一个针对PMP考试的刷题小工具，理论上可以通过修改题库支持任何类型的刷题需要。
 
