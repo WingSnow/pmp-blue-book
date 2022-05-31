@@ -6,6 +6,7 @@ import {
   collectQuestion,
   cancelCollect,
   getCollections,
+  getRecord,
 } from './controllers/examController'
 
 const router: Router = new Router()
@@ -13,7 +14,7 @@ const router: Router = new Router()
 router.prefix('/api')
 
 router.get('/', async (ctx, next) => {
-  ctx.body = "Hello Koa and TS."
+  ctx.body = 'Hello Koa and TS.'
 })
 
 router.post('/token', auth)
@@ -21,6 +22,7 @@ router.post('/token', auth)
 router.get('/exam', getExam)
 router.get('/collections', getCollections)
 router.get('/collections/:id', getCollections)
+router.get('/record', getRecord)
 
 router.put('/questions/:id/answer', answerQuestion)
 router.put('/questions/:id/collect', collectQuestion)

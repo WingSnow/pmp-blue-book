@@ -177,7 +177,7 @@ const textI18nFilter = (text: string | undefined) => {
       </p>
     </div>
   </transition>
-  <div class="footer">
+  <div class="footer mw-vh">
     <!--设置按钮-->
     <a-button
       type="normal"
@@ -198,7 +198,14 @@ const textI18nFilter = (text: string | undefined) => {
     </a-space>
   </div>
 
-  <a-drawer title="设置" v-model:visible="settingBlankShow" placement="bottom">
+  <a-drawer
+    title="设置"
+    v-model:visible="settingBlankShow"
+    placement="bottom"
+    get-container="#app"
+    :style="{ left: 'initial' }"
+    class="mw-vh"
+  >
     <div class="setting-item" @click="setting.setAutoCollect()">
       <label>自动收藏错题</label>
       <a-switch :checked="setting.data.autoCollect"></a-switch>
@@ -207,14 +214,14 @@ const textI18nFilter = (text: string | undefined) => {
       <label>中英对照</label>
       <a-switch :checked="setting.data.twoToneLanguage"></a-switch>
     </div>
-    <div class="setting-item" @click="todoInfo">
+    <!-- <div class="setting-item" @click="todoInfo">
       <label style="opacity: 0.5">只做已收藏题目</label>
       <a-switch :checked="false" disabled></a-switch>
     </div>
     <div class="setting-item" @click="todoInfo">
       <label style="opacity: 0.5">不做已收藏题目</label>
       <a-switch :checked="false" disabled></a-switch>
-    </div>
+    </div> -->
   </a-drawer>
 </template>
 

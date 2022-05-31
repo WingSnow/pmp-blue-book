@@ -176,7 +176,7 @@ const downEnable = computed(() => {
       </div>
     </div>
   </a-spin>
-  <div class="footer">
+  <div class="footer mw-vh">
     <a-space class="float-left">
       <!--选题按钮-->
       <a-button
@@ -220,46 +220,50 @@ const downEnable = computed(() => {
         >下一题</a-button
       >
     </a-space>
-
-    <a-drawer
-      v-model:visible="listBlankShow"
-      class="list-drawer"
-      placement="bottom"
-    >
-      <template #extra>
+  </div>
+  <a-drawer
+    v-model:visible="listBlankShow"
+    class="list-drawer mw-vh"
+    placement="bottom"
+    get-container="#app"
+    :style="{ left: 'initial', textAlign: 'left' }"
+  >
+    <template #extra>
+      <a-button
+        type="text"
+        size="32"
+        @click="refreshList"
+        style="color: rgba(0, 0, 0, 0.5)"
+      >
+        <reload-outlined />
+      </a-button>
+    </template>
+    <a-spin :spinning="loading">
+      <template v-for="item in collectionsIdList" :key="item">
         <a-button
-          type="text"
-          size="32"
-          @click="refreshList"
-          style="color: rgba(0, 0, 0, 0.5)"
-        >
-          <reload-outlined />
+          class="item"
+          type="primary"
+          :disabled="item === current"
+          @click="jumpTo(item)"
+          >{{ item }}
         </a-button>
       </template>
-      <a-spin :spinning="loading">
-        <template v-for="item in collectionsIdList" :key="item">
-          <a-button
-            class="item"
-            type="primary"
-            :disabled="item === current"
-            @click="jumpTo(item)"
-            >{{ item }}</a-button
-          >
-        </template>
-      </a-spin>
-    </a-drawer>
+    </a-spin>
+  </a-drawer>
 
-    <a-drawer
-      title="设置"
-      v-model:visible="settingBlankShow"
-      placement="bottom"
-    >
-      <div class="setting-item" @click="setting.setTwoToneLanguage()">
-        <label>中英对照</label>
-        <a-switch :checked="setting.data.twoToneLanguage"></a-switch>
-      </div>
-    </a-drawer>
-  </div>
+  <a-drawer
+    title="设置"
+    v-model:visible="settingBlankShow"
+    placement="bottom"
+    get-container="#app"
+    :style="{ left: 'initial' }"
+    class="mw-vh"
+  >
+    <div class="setting-item" @click="setting.setTwoToneLanguage()">
+      <label>中英对照</label>
+      <a-switch :checked="setting.data.twoToneLanguage"></a-switch>
+    </div>
+  </a-drawer>
 </template>
 
 <style scoped lang="scss">

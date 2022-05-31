@@ -4,6 +4,7 @@ import { UserOutlined } from '@ant-design/icons-vue'
 import { useRouter } from 'vue-router'
 import QuestionContent from '../components/QuestionContent.vue'
 import CollectContent from '../components/CollectContent.vue'
+import ScoreBoard from '../components/ScoreBoard.vue'
 
 const selectedKeys = ref<string[]>(['0'])
 
@@ -14,6 +15,18 @@ const logout = () => {
   router.replace({
     name: 'Login',
   })
+}
+
+const scoreBoardVisible = ref(false)
+const showScoreBoard = () => {
+  scoreBoardVisible.value = true
+}
+const scoreBoardRef = ref(ScoreBoard)
+
+const onScoreBoardVisibleChange = (visible: boolean) => {
+  if (visible) {
+    scoreBoardRef.value.loadDate()
+  }
 }
 
 const mode = computed(() => {
@@ -29,13 +42,16 @@ const mode = computed(() => {
 
 <template>
   <a-layout style="background: initial">
-    <a-layout-header class="header">
+    <a-layout-header class="header bar mw-vh">
       <a-dropdown>
         <a-avatar size="32" class="logo">
           <template #icon><UserOutlined /></template>
         </a-avatar>
         <template #overlay>
           <a-menu>
+            <a-menu-item>
+              <a @click="showScoreBoard">计分板</a>
+            </a-menu-item>
             <a-menu-item>
               <a @click="logout">退出登录</a>
             </a-menu-item>
@@ -61,6 +77,18 @@ const mode = computed(() => {
       <collect-content v-show="mode === 'collect'"></collect-content> -->
     </a-layout-content>
   </a-layout>
+
+  <a-drawer
+    title="计分板"
+    placement="top"
+    v-model:visible="scoreBoardVisible"
+    @after-visible-change="onScoreBoardVisibleChange"
+    get-container="#app"
+    :style="{ left: 'initial' }"
+    class="mw-vh"
+  >
+    <score-board ref="scoreBoardRef" />
+  </a-drawer>
 </template>
 
 <style scoped lang="scss">
@@ -72,24 +100,17 @@ const mode = computed(() => {
   cursor: pointer;
 }
 
-.header {
+.bar {
   position: fixed;
-  z-index: 1;
   width: 100%;
+  z-index: 1;
+}
+
+.header {
+  top: 0;
 }
 
 .content {
   margin: 64px 0;
-}
-
-.footer {
-  position: fixed;
-  background: #001529;
-  color: rgba(255, 255, 255, 0.65);
-  bottom: 0;
-  z-index: 1;
-  width: 100%;
-  padding: 16px 50px;
-  text-align: right;
 }
 </style>

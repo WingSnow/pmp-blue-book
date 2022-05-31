@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
+import {
+  UserOutlined,
+  LockOutlined,
+  GithubOutlined,
+} from '@ant-design/icons-vue'
 
 interface FormState {
   username: string
@@ -69,6 +73,17 @@ const LoginButtonDisabled = computed(() => {
 </script>
 
 <template>
+  <div class="header bar mw-vh">
+    <span class="logo"> PMP BLUE BOOK </span>
+    <div class="extra">
+      <a href="https://github.com/WingSnow/pmp-blue-book" target="_blank">
+        <a-button type="link" size="large">
+          <github-outlined />
+        </a-button>
+      </a>
+    </div>
+  </div>
+
   <div class="main">
     <img src="../assets/logo.png" class="logo" />
     <a-form
@@ -129,9 +144,8 @@ const LoginButtonDisabled = computed(() => {
       </a-form-item>
     </a-form>
   </div>
-  <div class="footer">
-    PMP BLUE BOOK © 2022<br />
-    Created by <a>@WingSnow</a>
+  <div class="footer bar mw-vh">
+    ©2022 by <a href="https://github.com/WingSnow">@WingSnow</a>
   </div>
 </template>
 
@@ -139,8 +153,8 @@ const LoginButtonDisabled = computed(() => {
 .main {
   min-width: 260px;
   max-width: 80%;
-  height: calc(100vh - 100px);
   margin: auto;
+  padding-top: 50px;
   .login-button {
     padding: 0 15px;
     font-size: 14px;
@@ -153,20 +167,49 @@ const LoginButtonDisabled = computed(() => {
   }
   .logo {
     max-width: 80vw;
-    max-height: 60%;
+    max-height: 40vh;
     margin-bottom: 32px;
     margin: 16px;
   }
 }
 
-.footer {
-  background-color: #fff;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+.bar {
+  background-color: rgba(252, 252, 252);
+  padding: 0 2vw;
+  color: rgba(0, 0, 0, 0.65);
+  height: 40px;
   width: 100%;
+  line-height: 40px;
+}
+
+.header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+
+  .logo {
+    padding: 0 15px;
+    font-weight: 600;
+  }
+
+  .extra {
+    position: absolute;
+    right: 0;
+    top: 0;
+
+    button {
+      color: rgba(0, 0, 0, 0.65);
+
+      :hover {
+        color: #1890ff;
+      }
+    }
+  }
+}
+
+.footer {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
   position: fixed;
   bottom: 0;
-  text-align: center;
-  padding: 8px 50px;
-  color: rgba(0, 0, 0, 0.65);
 }
 </style>

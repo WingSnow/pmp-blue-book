@@ -122,6 +122,26 @@ const getCollectionsById = async (
   return result
 }
 
+const getRecord = async (userId: number) => {
+  const { total } = await db.get(`select count(1) total from questions`)
+  const { finished } = await db.get(
+    `select count(1) finished from answer_record where user_id = ?`,
+    [userId]
+  )
+  const { correct } = await db.get(
+    `select count(1) correct from answer_record record
+  inner join questions q on record.question_id = q.id and record.answer = q.answer
+  where user_id = ?`,
+    [userId]
+  )
+
+  return {
+    finished,
+    correct,
+    total,
+  }
+}
+
 const exam = {
   getExam,
   answerQuestion,
@@ -130,6 +150,7 @@ const exam = {
   getCollectionsList,
   getCollections,
   getCollectionsById,
+  getRecord,
 }
 
 export default exam

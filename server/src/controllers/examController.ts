@@ -70,3 +70,8 @@ export const getCollections = async (ctx: Koa.Context): Promise<void> => {
 
   ctx.body = result
 }
+
+export const getRecord = async (ctx: Koa.Context): Promise<void> => {
+  const userId = await authMaker(ctx)
+  ctx.body = await exam.getRecord(userId)
+}
