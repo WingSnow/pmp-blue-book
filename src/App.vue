@@ -22,7 +22,7 @@
   text-align: center;
   color: #2c3e50;
   margin: auto;
-  height: 100vh;
+  min-height: 100vh;
   background: #fff;
   position: relative;
 }
