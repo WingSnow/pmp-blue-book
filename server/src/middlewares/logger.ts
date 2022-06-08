@@ -1,5 +1,8 @@
 import path from 'path'
-import log4js from 'koa-log4'
+import log4js from 'log4js'
+import { Context, Next } from 'koa'
+import util from 'util'
+import dayjs from 'dayjs'
 
 log4js.configure({
   appenders: {
@@ -30,5 +33,29 @@ log4js.configure({
   },
 })
 
-export const accessLogger = () => log4js.koaLogger(log4js.getLogger('access')) // 记录所有访问级别的日志
+// date, addr, method, url, HTTP/version, content-length, user-agent
+const DEFAULT = '%s %s -- %s %s HTTP/%s, %s %s'
+
+// 记录所有访问级别的日志
+export const accessLogger = () => {
+  return async (ctx: Context, next: Next) => {
+    const logger = log4js.getLogger('access')
+    const req = ctx.request
+    const { header } = req
+    const nodeReq = ctx.req
+    const str = util.format(
+      DEFAULT,
+      dayjs().format(),
+      req.ip,
+      req.method,
+      req.url,
+      nodeReq.httpVersion,
+      req.length || null,
+      header['user-agent']
+    )
+    logger.info(str)
+    await next()
+  }
+}
+
 export const systemLogger = log4js.getLogger('application') // 记录所有应用级别的日志

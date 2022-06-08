@@ -24,7 +24,6 @@ app
   //     path: defaultPath,
   //   })
   // )
-
   .use(
     jwt({ secret: jwtConfig.SECRET }).unless({
       custom: (ctx) => {
